@@ -16,9 +16,27 @@
 <!--        <i class="fa fa-heart"></i>-->
 <!--        <span>{{ likes }}</span>-->
         <button @click="toggleLike" :class="{ liked: liked }">
-          <img src="@/assets/images/like.png" v-if="liked" />
-          <img src="@/assets/images/unlike.png" v-else />
+          <img src="@/assets/images/unlike.png" v-if="liked" />
+          <img src="@/assets/images/like.png" v-else />
+          <span class="count" v-if="dzcount">{{ dzcount }}</span>
           </button>
+        <button @click="togglestar" :class="{ liked: stared }">
+          <i class="el-icon-star-on" v-if="stared" v-bind:style="{ width: '25px', height: '25px' }"></i>
+          <i class="el-icon-star-off" v-else v-bind:style="{ width: '25px', height: '25px' }"></i>
+          <span class="count" v-if="sccount">{{ sccount }}</span>
+        </button>
+        <el-button  @click="dialogFormVisible = true" circle>发表评论</el-button>
+<!--发表评论表单-->
+        <el-dialog title="发表评论" :visible.sync="dialogFormVisible">
+          <el-form :model="form">
+
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+          </div>
+        </el-dialog>
+
       </div>
 <!--      <div class="comments">-->
 <!--        <i class="fa fa-comment"></i>-->
@@ -35,30 +53,7 @@
 export default {
   name:'TieBa',
   props: {
-    // user: {
-    //   type: Object,
-    //   required: true
-    // },
-    // content: {
-    //   type: String,
-    //   required: true
-    // },
-    // image: {
-    //   type: String,
-    //   default: null
-    // },
-    // likes: {
-    //   type: Number,
-    //   default: 0
-    // },
-    // comments: {
-    //   type: Number,
-    //   default: 0
-    // },
-    // date: {
-    //   type: String,
-    //   required: true
-    // }
+
   },
   data(){
     return{
@@ -71,13 +66,30 @@ export default {
       image:'http://h.hiphotos.baidu.com/image/pic/item/7c1ed21b0ef41bd5f2c2a9e953da81cb39db3d1d.jpg',
       likes:'1',
       liked: false, // 初始状态为未点赞
+      stared: false,//初始状态未收藏
+      dzcount: 1, // 点赞计数器
+      sccount: 1, // 收藏计数器
+      dialogFormVisible: false,
     }
   },
   methods: {
     toggleLike() {
       // 点赞操作
       this.liked = !this.liked; // 点赞状态取反
+      if (this.liked) {
+        this.dzcount++; // 点赞计数器加1
+      } else {
+        this.dzcount--; // 取消点赞计数器减1
+      }
     },
+    togglestar(){
+      this.stared = !this.stared; // 点赞状态取反
+      if (this.stared) {
+        this.sccount++; // 点赞计数器加1
+      } else {
+        this.sccount--; // 取消点赞计数器减1
+      }
+    }
   },
 }
 </script>
@@ -172,5 +184,10 @@ button.liked {
 button img {
   width: 24px;
   height: 24px;
+}
+span.count {
+  margin-left: 5px; /* 数字和图标之间添加一些间距 */
+  font-size: 12px;
+  color: #666;
 }
 </style>
