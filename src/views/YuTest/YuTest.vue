@@ -1,7 +1,7 @@
 <template>
   <div class="post">
     <div class="post-header">
-      <!--用户信息-->
+        <!--用户信息-->
       <div class="meme">
         <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
       </div>
@@ -65,7 +65,7 @@
 
 <script>
 export default {
-  name: 'TieBa',
+  name: 'YuTest',
   props: {},
   data() {
     return {
