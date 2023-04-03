@@ -32,41 +32,40 @@
         <el-button  @click="dialogFormVisible = true" >评论</el-button>
         <!--        评论按钮         -->
         <el-dialog title="发表评论" :visible.sync="dialogFormVisible">
+
           <el-form ref="commentForm" :model="comment" label-width="80px">
-            <el-form-item label="Name">
-              <el-input v-model="comment.name"></el-input>
-            </el-form-item>
             <el-form-item label="Comment">
               <el-input
                 type="textarea"
                 :rows="2"
-                placeholder="请输入内容"
-                v-model="comment.content">
+                placeholder="说点什么吧"
+                v-model="newComment">
               </el-input>
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="addComment">发 布</el-button>
+            <el-button type="primary" @click="submitComment">发 布</el-button>
           </div>
         </el-dialog>
-
       </div>
     </div>
     <div class="comments">
       <!-- 评论列表 -->
-      <el-card v-for="(comment, index) in comments" :key="index">
-        <p>{{ comment.name }}:  {{ comment.content }}</p>
-        <p>时间: {{ comment.time }}</p>
-      </el-card>
+      <div class="comment-list">
+        <CommentItem v-for="comment in comments" :key="comment.id" :comment="comment" />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import CommentItem from './CommentItem.vue'
+
 export default {
   name: 'TieBa',
   props: {},
+  components: { CommentItem },
   data() {
     return {
       // eslint-disable-next-line vue/no-dupe-keys
@@ -82,11 +81,21 @@ export default {
       dzcount: 1, // 点赞计数器
       sccount: 1, // 收藏计数器
       dialogFormVisible: false,
-      comment: {
-        name: 'Yu',
-        content: ''
-      },
-      comments: []
+      comments: [
+        {
+          id: 1,
+          author: '张三',
+          content: '小姐姐太美了！',
+          timestamp: '2023/04/01 12:34:56'
+        },
+        {
+          id: 2,
+          author: '李四',
+          content: '对啊对啊!',
+          timestamp: '2023/04/01 12:50:56'
+        },
+      ],
+      newComment: ''
     }
   },
   methods: {
@@ -120,6 +129,21 @@ export default {
           this.comment.content = '';
         }
       });
+    },
+    submitComment() {
+      if (this.newComment.trim() === '') {
+        return
+      }
+
+      const newId = this.comments.length + 1
+      const newComment = {
+        id: newId,
+        author: '匿名用户',
+        content: this.newComment,
+        timestamp: new Date().toLocaleString()
+      }
+      this.comments.push(newComment)
+      this.newComment = ''
     }
   },
 }

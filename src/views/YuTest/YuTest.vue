@@ -1,76 +1,77 @@
 <template>
-  <div>
-    <el-tag
-      v-for="(tag, index) in tags"
-      :key="index"
-      :type="tag.type"
-      :closable="tag.closable"
-      @close="handleClose(index)"
-    >
-      {{ tag.label }}
-    </el-tag>
-    <!--设置一个有预设，也可以自定义的标签-->
-    <el-select
-      v-model="value"
-      multiple
-      filterable
-      allow-create
-      default-first-option
-      placeholder="请输入标签名称"
-      @keyup.enter.native="handleInputConfirm">
-      <el-option
-        v-for="item in options"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value">
-      </el-option>
-    </el-select>
-      <el-button slot="append" icon="el-icon-check" @click="handleInputConfirm" />
+  <div class="comment-section">
+    <div class="comment-list">
+      <comment-item
+        v-for="(comment, index) in comments"
+        :key="comment.id"
+        :comment="comment"
+        @toggle-reply="toggleReply(index)"
+      />
+    </div>
   </div>
 </template>
 
 <script>
+import CommentItem from './CommentItem.vue';
+
 export default {
   name: 'YuTest',
+  components: {
+    CommentItem
+  },
   data() {
     return {
-      options: [{
-        value: '毕业季',
-        label: '毕业季'
-      }, {
-        value: '电子游戏',
-        label: '电子游戏'
-      }, {
-        value: '闲置出售',
-        label: '闲置出售'
-      }],
-      value: [],
-      tags: [
-        { label: "标签一", type: "primary", closable: true },
-        { label: "标签二", type: "success", closable: true },
-        { label: "标签三", type: "warning", closable: true },
-        { label: "标签四", type: "danger", closable: true },
+      comments: [
+        {
+          id: 1,
+          author: 'Alice',
+          timestamp: '2022-04-05 10:30',
+          content: '这是一条评论。',
+          replies: [
+            {
+              id: 2,
+              author: 'Bob',
+              timestamp: '2022-04-05 10:35',
+              content: '谢谢你的评论！'
+            },
+            {
+              id: 3,
+              author: 'Charlie',
+              timestamp: '2022-04-05 10:40',
+              content: '我也来凑个热闹。'
+            }
+          ]
+        },
+        {
+          id: 4,
+          author: 'David',
+          timestamp: '2022-04-05 11:00',
+          content: '这是另一条评论。',
+          replies: []
+        }
       ],
-      colorIndex: 0,
-      colors: ["primary", "success", "warning", "danger", "info"],
+      showReply: []
     };
   },
   methods: {
-    handleClose(index) {
-      this.tags.splice(index, 1);
-    },
-    handleInputConfirm() {
-      if (this.value) {
-        const newTag = {
-          label: this.value,
-          type: this.colors[this.colorIndex],
-          closable: true,
-        };
-        this.tags.push(newTag);
-        this.value = [];
-        this.colorIndex = (this.colorIndex + 1) % this.colors.length;
-      }
-    },
-  },
+    toggleReply(index) {
+      this.$set(this.showReply, index, !this.showReply[index]);
+    }
+  }
 };
 </script>
+
+<style>
+.comment-section {
+  margin-top: 16px;
+}
+
+.comment-list {
+  margin-top: 16px;
+}
+
+.reply-list {
+  margin-top: 8px;
+  margin-left: 16px;
+}
+</style>
