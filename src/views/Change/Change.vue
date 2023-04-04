@@ -46,7 +46,7 @@
 import { mapState } from 'vuex';
 
 export default {
-  name: 'YuTest',
+  name: 'Change',
   data() {
     return {
       form: {
