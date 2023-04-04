@@ -21,6 +21,10 @@
             <el-form-item label="用户名">
               <el-input v-model="form.username"></el-input>
             </el-form-item>
+            <el-form-item label="性别">
+              <el-radio v-model="radio" label="1">男<i class="el-icon-male"></i></el-radio>
+              <el-radio v-model="radio" label="2">女<i class="el-icon-female"></i></el-radio>
+            </el-form-item>
             <el-form-item label="自我介绍">
               <el-input v-model="form.bio"></el-input>
             </el-form-item>
@@ -49,6 +53,7 @@ export default {
   name: 'Change',
   data() {
     return {
+      radio: '0',
       form: {
         username: '',
         bio: '',
@@ -79,6 +84,7 @@ export default {
       this.form.bio = [];
       this.form.location = [];
       this.form.website = [];
+      this.radio = '0';
       this.$message.success('重置成功');
     },
     beforeAvatarUpload(file) {
