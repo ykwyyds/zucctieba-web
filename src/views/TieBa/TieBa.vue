@@ -32,7 +32,6 @@
         <el-button  @click="dialogFormVisible = true" >评论</el-button>
         <!--        评论按钮         -->
         <el-dialog title="发表评论" :visible.sync="dialogFormVisible">
-
           <el-form ref="commentForm" :model="comment" label-width="80px">
             <el-form-item label="Comment">
               <el-input
@@ -78,8 +77,8 @@ export default {
       likes: '1',
       liked: false, // 初始状态为未点赞
       stared: false, //初始状态未收藏
-      dzcount: 1, // 点赞计数器
-      sccount: 1, // 收藏计数器
+      dzcount: 50, // 点赞计数器
+      sccount: 20, // 收藏计数器
       dialogFormVisible: false,
       comments: [
         {

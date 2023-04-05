@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="title">学生课表</h1>
+    <h1 class="title">增加、修改课表</h1>
     <el-divider></el-divider>
     <div class="classschedule">
       <!-- 课程表列表 -->

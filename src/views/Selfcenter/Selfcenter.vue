@@ -106,7 +106,7 @@ export default {
           content: '小姐姐太美了！',
           timestamp: '2023/04/01 12:34:56'
         },
-        ],
+      ],
       weiboList: [
         {
           content: '这是一条微博内容',
