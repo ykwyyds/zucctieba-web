@@ -39,8 +39,7 @@
         </div>
       </el-dialog>
       <!-- 增加课程表 -->
-      <p></p>
-      <el-form ref="form" :model="form" label-width="80px" style="margin-bottom: 20px;">
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px" style="margin-bottom: 20px;">
         <el-form-item label="课程名称">
           <el-input v-model="form.courseName"></el-input>
         </el-form-item>

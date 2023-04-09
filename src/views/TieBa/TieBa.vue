@@ -143,6 +143,7 @@ export default {
       }
       this.comments.push(newComment)
       this.newComment = ''
+      this.dialogFormVisible = false
     }
   },
 }

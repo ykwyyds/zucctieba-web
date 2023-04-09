@@ -34,7 +34,10 @@
           :value="item.value">
         </el-option>
       </el-select>
-      <el-button slot="append" icon="el-icon-check" @click="handleInputConfirm" />
+        <div><el-button type="primary" round slot="append" icon="el-icon-check" @click="handleInputConfirm">
+          确认标签
+        </el-button>
+        </div>
       </el-form-item>
       <el-form-item label="谁可以看">
         <el-radio v-model="radio" label="1">所有人</el-radio>
@@ -109,10 +112,7 @@ export default {
       }],
       value: [],
       tags: [
-        { label: "标签一", type: "primary", closable: true },
-        { label: "标签二", type: "success", closable: true },
-        { label: "标签三", type: "warning", closable: true },
-        { label: "标签四", type: "danger", closable: true },
+        { label: "我爱城院", type: "primary", closable: true },
       ],
       colorIndex: 0,
       colors: ["primary", "success", "warning", "danger", "info"],

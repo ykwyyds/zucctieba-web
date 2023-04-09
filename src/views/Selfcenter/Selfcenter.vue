@@ -3,92 +3,95 @@
     <!-- 用户资料 -->
     <el-card>
       <div slot="header" class="profile-info">
-        <el-avatar shape="square" :size="80" :src="userInfo.avatarUrl"></el-avatar>
-        <div>
-        <h2>{{userInfo.nickname}}</h2>
-        <span class="username">@{{ userInfo.username }}</span>
-        </div>
+        <el-avatar shape="square" :size="80" :src="userInfo.avatarUrl" />
+        <h2 style="margin-left: 10px;">{{ userInfo.nickname }}@{{ userInfo.username }}</h2>
+        <el-button type="primary" :class="{subd}" round @click="sub">
+          <i v-if="subd">已关注</i>
+          <i v-else>关注</i>
+        </el-button>
       </div>
       <el-collapse accordion>
         <el-collapse-item>
           <template slot="title">
-            更多信息<i class="header-icon el-icon-info"></i>
+            更多信息<i class="header-icon el-icon-info" />
           </template>
           <div class="self-info">
-            <p>{{userInfo.sex}}</p>
-            <p>{{userInfo.bio}}</p>
-            <span>{{userInfo.location}}</span>
+            <p>性别：{{ userInfo.sex }}</p>
+            <p>个性签名：{{ userInfo.bio }}</p>
+            <p>IP所属地：{{ userInfo.location }}</p>
           </div>
         </el-collapse-item>
       </el-collapse>
     </el-card>
     <el-row>
       <el-col span="20">
-    <!-- 微博列表 -->
-    <el-card class="self-list">
-      <div slot="header">
-        <h3>帖子列表</h3>
-      </div>
-      <div v-for="(weibo, index) in weiboList" :key="index">
-        <div class="weibo-content">
-          <p>{{weibo.content}}</p>
-          <div v-if="weibo.images.length > 0" class="weibo-images">
-            <el-image v-for="(image, index) in weibo.images" :key="index" :src="image"></el-image>
+        <!-- 帖子列表 -->
+        <el-card class="self-list">
+          <div slot="header">
+            <h3>帖子列表</h3>
           </div>
-        </div>
-        <div class="weibo-footer">
-          <div class="likes">
-            <!--        生成点赞、收藏按钮        -->
-            <button @click="toggleLike" :class="{ liked: liked }">
-              <img src="@/assets/images/unlike.png" v-if="liked" />
-              <img src="@/assets/images/like.png" v-else />
-              <span class="count" v-if="dzcount">{{ dzcount }}</span>
-            </button>
-            <button @click="togglestar" :class="{ liked: stared }">
-              <i class="el-icon-star-on" v-if="stared" v-bind:style="{ width: '25px', height: '25px' }"></i>
-              <i class="el-icon-star-off" v-else v-bind:style="{ width: '25px', height: '25px' }"></i>
-              <span class="count" v-if="sccount">{{ sccount }}</span>
-            </button>
-            <el-button  @click="dialogFormVisible = true" >评论</el-button>
-            <!--        评论按钮         -->
-            <el-dialog title="发表评论" :visible.sync="dialogFormVisible">
-              <el-form ref="commentForm" :model="comment" label-width="80px">
-                <el-form-item label="Comment">
-                  <el-input
-                    type="textarea"
-                    :rows="2"
-                    placeholder="说点什么吧"
-                    v-model="newComment">
-                  </el-input>
-                </el-form-item>
-              </el-form>
-              <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="submitComment">发 布</el-button>
+          <div v-for="(weibo, index) in weiboList" :key="index">
+            <div class="weibo-content">
+              <p>{{ weibo.content }}</p>
+              <div v-if="weibo.images.length > 0" class="weibo-images">
+                <el-image v-for="(image, index) in weibo.images" :key="index" :src="image" />
               </div>
-            </el-dialog>
-          </div>
-          <div class="comments">
-            <!-- 评论列表 -->
-            <div class="comment-list">
-              <CommentItem v-for="comment in comments" :key="comment.id" :comment="comment" />
+              <div class="weibo-footer">
+                <div class="likes">
+                  <!--        生成点赞、收藏按钮        -->
+                  <button :class="{ liked: liked }" @click="toggleLike">
+                    <img v-if="liked" src="@/assets/images/unlike.png">
+                    <img v-else src="@/assets/images/like.png">
+                    <span v-if="dzcount" class="count">{{ dzcount }}</span>
+                  </button>
+                  <button :class="{ liked: stared }" @click="togglestar">
+                    <i v-if="stared" class="el-icon-star-on" :style="{ width: '25px', height: '25px' }" />
+                    <i v-else class="el-icon-star-off" :style="{ width: '25px', height: '25px' }" />
+                    <span v-if="sccount" class="count">{{ sccount }}</span>
+                  </button>
+                  <!--        评论、删除按钮         -->
+                  <el-button @click="dialogFormVisible = true">评论</el-button>
+                  <el-button type="danger" @click="dele">删除</el-button>
+                  <!--        评论按钮窗口         -->
+                  <el-dialog title="发表评论" :visible.sync="dialogFormVisible">
+                    <el-form ref="commentForm" :model="comment" label-width="80px">
+                      <el-form-item label="Comment">
+                        <el-input
+                          v-model="newComment"
+                          type="textarea"
+                          :rows="2"
+                          placeholder="说点什么吧"
+                        />
+                      </el-form-item>
+                    </el-form>
+                    <div slot="footer" class="dialog-footer">
+                      <el-button @click="dialogFormVisible = false">取 消</el-button>
+                      <el-button type="primary" @click="submitComment">发 布</el-button>
+                    </div>
+                  </el-dialog>
+                </div>
+                <div class="comments">
+                  <!-- 评论列表 -->
+                  <div class="comment-list">
+                    <CommentItem v-for="comment in comments" :key="comment.id" :comment="comment" />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-    </el-card>
+        </el-card>
       </el-col>
       <el-col span="4">
-    <!-- 关注列表 -->
-    <el-card class="follow-list">
-      <div slot="header">
-        <h3>关注列表</h3>
-      </div>
-      <div v-for="(user, index) in followList" :key="index" class="guanzhu">
-        <el-avatar shape="square" :size="50" :src="user.avatarUrl"></el-avatar>
-        <span>{{user.nickname}}</span>
-      </div>
-    </el-card>
+        <!-- 关注列表 -->
+        <el-card class="follow-list">
+          <div slot="header">
+            <h3>关注列表</h3>
+          </div>
+          <div v-for="(user, index) in followList" :key="index" class="guanzhu">
+            <el-avatar shape="square" :size="50" :src="user.avatarUrl" />
+            <span>{{ user.nickname }}</span>
+          </div>
+        </el-card>
       </el-col>
     </el-row>
   </div>
@@ -98,13 +101,14 @@
 import CommentItem from './CommentItem.vue'
 export default {
   name: 'SelfCenter',
-  props: {},
   components: { CommentItem },
+  props: {},
   data() {
     return {
       likes: '1',
       liked: false, // 初始状态为未点赞
-      stared: false, //初始状态未收藏
+      stared: false, // 初始状态未收藏
+      subd: false,
       dzcount: 50, // 点赞计数器
       sccount: 20, // 收藏计数器
       dialogFormVisible: false,
@@ -123,25 +127,34 @@ export default {
           author: '张三',
           content: '小姐姐太美了！',
           timestamp: '2023/04/01 12:34:56'
-        },
+        }
       ],
       weiboList: [
         {
+          id: 1,
           content: '真的不会写啊QUQ',
           images: ['http://h.hiphotos.baidu.com/image/pic/item/7c1ed21b0ef41bd5f2c2a9e953da81cb39db3d1d.jpg'],
           reposts: 10,
           comments: 20,
           likes: 30
         },
+        {
+          id: 2,
+          content: '我也不会啊',
+          images: [],
+          reposts: 10,
+          comments: 20,
+          likes: 50
+        }
       ],
       followList: [
         {
           nickname: '李四',
-          avatarUrl: 'https://example.com/avatar2.png'
+          avatarUrl: 'https://picsum.photos/50'
         },
         {
           nickname: '王五',
-          avatarUrl: 'https://example.com/avatar3.png'
+          avatarUrl: 'https://picsum.photos/40'
         }
       ]
     }
@@ -149,40 +162,39 @@ export default {
   methods: {
     toggleLike() {
       // 点赞操作
-      this.liked = !this.liked; // 点赞状态取反
+      this.liked = !this.liked // 点赞状态取反
       if (this.liked) {
-        this.dzcount++; // 点赞计数器加1
+        this.dzcount++ // 点赞计数器加1
       } else {
-        this.dzcount--; // 取消点赞计数器减1
+        this.dzcount-- // 取消点赞计数器减1
       }
     },
     togglestar() {
-      this.stared = !this.stared; // 点赞状态取反
+      this.stared = !this.stared // 点赞状态取反
       if (this.stared) {
-        this.sccount++; // 点赞计数器加1
+        this.sccount++ // 点赞计数器加1
       } else {
-        this.sccount--; // 取消点赞计数器减1
+        this.sccount-- // 取消点赞计数器减1
       }
     },
     addComment() {
       // validate comment form
       this.$refs.commentForm.validate((valid) => {
-        this.dialogFormVisible = false;
-        this.comment.time = new Date().toLocaleString();
+        this.dialogFormVisible = false
+        this.comment.time = new Date().toLocaleString()
         if (valid) {
           // add comment to comments array
-          this.comments.push({...this.comment});
+          this.comments.push({ ...this.comment })
           // clear comment form
-          this.comment.name = '';
-          this.comment.content = '';
+          this.comment.name = ''
+          this.comment.content = ''
         }
-      });
+      })
     },
     submitComment() {
       if (this.newComment.trim() === '') {
         return
       }
-
       const newId = this.comments.length + 1
       const newComment = {
         id: newId,
@@ -192,14 +204,58 @@ export default {
       }
       this.comments.push(newComment)
       this.newComment = ''
+      this.dialogFormVisible = false
+    },
+    sub() {
+      this.subd = !this.subd
+      if (this.subd) {
+        this.$message({
+          type: 'success',
+          message: '关注成功！'
+        })
+      } else {
+        this.$confirm('此操作将取消管制, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'info',
+            message: '取关成功'
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'success',
+            message: '感谢你的继续关注'
+          })
+          this.subd = !this.subd
+        })
+      }
+    },
+    dele() {
+      this.$confirm('此操作将删除该帖子, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     }
-  },
+  }
 }
 </script>
 
 <style scoped>
 .profile-container {
-  display: flex;
+  /*display: flex;*/
   flex-direction: column;
   align-items: center;
 }
