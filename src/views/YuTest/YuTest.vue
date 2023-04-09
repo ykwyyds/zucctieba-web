@@ -1,83 +1,19 @@
 <template>
-  <div class="profile-container">
-    <!-- 用户资料 -->
-    <div class="profile-header">
-      <!--      <el-avatar :src="userInfo.avatarUrl"></el-avatar>-->
-      <el-avatar shape="square" :size="80" :src="userInfo.avatarUrl"></el-avatar>
-      <div class="profile-info">
-        <h2>{{userInfo.nickname}}</h2>
-        <p class="username">@{{ userInfo.username }}</p>
-        <p>{{userInfo.bio}}</p>
-      </div>
-    </div>
-
-    <!-- 微博列表 -->
-    <el-card class="weibo-list">
-      <div slot="header">
-        <h3>微博列表</h3>
-      </div>
-      <div v-for="(weibo, index) in weiboList" :key="index">
-        <div class="weibo-content">
-          <p>{{weibo.content}}</p>
-          <div v-if="weibo.images.length > 0" class="weibo-images">
-            <el-image v-for="(image, index) in weibo.images" :key="index" :src="image"></el-image>
-          </div>
-        </div>
-        <div class="weibo-footer">
-          <div class="likes">
-            <!--        生成点赞、收藏按钮        -->
-            <button @click="toggleLike" :class="{ liked: liked }">
-              <img src="@/assets/images/unlike.png" v-if="liked" />
-              <img src="@/assets/images/like.png" v-else />
-              <span class="count" v-if="dzcount">{{ dzcount }}</span>
-            </button>
-            <button @click="togglestar" :class="{ liked: stared }">
-              <i class="el-icon-star-on" v-if="stared" v-bind:style="{ width: '25px', height: '25px' }"></i>
-              <i class="el-icon-star-off" v-else v-bind:style="{ width: '25px', height: '25px' }"></i>
-              <span class="count" v-if="sccount">{{ sccount }}</span>
-            </button>
-            <el-button  @click="dialogFormVisible = true" >评论</el-button>
-            <!--        评论按钮         -->
-            <el-dialog title="发表评论" :visible.sync="dialogFormVisible">
-              <el-form ref="commentForm" :model="comment" label-width="80px">
-                <el-form-item label="Comment">
-                  <el-input
-                    type="textarea"
-                    :rows="2"
-                    placeholder="说点什么吧"
-                    v-model="newComment">
-                  </el-input>
-                </el-form-item>
-              </el-form>
-              <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="submitComment">发 布</el-button>
-              </div>
-            </el-dialog>
-          </div>
-          <div class="comments">
-            <!-- 评论列表 -->
-            <div class="comment-list">
-              <CommentItem v-for="comment in comments" :key="comment.id" :comment="comment" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </el-card>
-
-    <!-- 关注列表 -->
-    <el-card class="follow-list">
-      <div slot="header">
-        <h3>关注列表</h3>
-      </div>
-      <div v-for="(user, index) in followList" :key="index" class="guanzhu">
-        <el-avatar shape="square" :size="50" :src="user.avatarUrl"></el-avatar>
-        <span>{{user.nickname}}</span>
-      </div>
-    </el-card>
-  </div>
+<el-row>
+<el-col :span="6">
+  <el-card>
+    <!-- 第一个 el-card 的内容 -->
+    haha
+  </el-card>
+</el-col>
+<el-col :span="6">
+  <el-card>
+    <!-- 第二个 el-card 的内容 -->
+    yeye
+  </el-card>
+</el-col>
+</el-row>
 </template>
-
 <script>
 import CommentItem from './CommentItem.vue'
 export default {
@@ -96,7 +32,7 @@ export default {
       userInfo: {
         nickname: '张三',
         username: 'Zhang',
-        avatarUrl: 'http://h.hiphotos.baidu.com/image/pic/item/7c1ed21b0ef41bd5f2c2a9e953da81cb39db3d1d.jpg',
+        avatarUrl: 'https://picsum.photos/60',
         bio: '一个热爱编程的程序员'
       },
       comments: [

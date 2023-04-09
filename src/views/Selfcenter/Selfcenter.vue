@@ -1,20 +1,33 @@
 <template>
   <div class="profile-container">
     <!-- 用户资料 -->
-    <div class="profile-header">
-      <!--      <el-avatar :src="userInfo.avatarUrl"></el-avatar>-->
-      <el-avatar shape="square" :size="80" :src="userInfo.avatarUrl"></el-avatar>
-      <div class="profile-info">
+    <el-card>
+      <div slot="header" class="profile-info">
+        <el-avatar shape="square" :size="80" :src="userInfo.avatarUrl"></el-avatar>
+        <div>
         <h2>{{userInfo.nickname}}</h2>
-        <p class="username">@{{ userInfo.username }}</p>
-        <p>{{userInfo.bio}}</p>
+        <span class="username">@{{ userInfo.username }}</span>
+        </div>
       </div>
-    </div>
-
+      <el-collapse accordion>
+        <el-collapse-item>
+          <template slot="title">
+            更多信息<i class="header-icon el-icon-info"></i>
+          </template>
+          <div class="self-info">
+            <p>{{userInfo.sex}}</p>
+            <p>{{userInfo.bio}}</p>
+            <span>{{userInfo.location}}</span>
+          </div>
+        </el-collapse-item>
+      </el-collapse>
+    </el-card>
+    <el-row>
+      <el-col span="20">
     <!-- 微博列表 -->
-    <el-card class="weibo-list">
+    <el-card class="self-list">
       <div slot="header">
-        <h3>微博列表</h3>
+        <h3>帖子列表</h3>
       </div>
       <div v-for="(weibo, index) in weiboList" :key="index">
         <div class="weibo-content">
@@ -64,7 +77,8 @@
         </div>
       </div>
     </el-card>
-
+      </el-col>
+      <el-col span="4">
     <!-- 关注列表 -->
     <el-card class="follow-list">
       <div slot="header">
@@ -75,6 +89,8 @@
         <span>{{user.nickname}}</span>
       </div>
     </el-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -96,8 +112,10 @@ export default {
       userInfo: {
         nickname: '张三',
         username: 'Zhang',
-        avatarUrl: 'http://h.hiphotos.baidu.com/image/pic/item/7c1ed21b0ef41bd5f2c2a9e953da81cb39db3d1d.jpg',
-        bio: '一个热爱编程的程序员'
+        avatarUrl: 'https://picsum.photos/60',
+        sex: '男',
+        bio: '一个热爱编程的程序员',
+        location: '浙江'
       },
       comments: [
         {
@@ -109,7 +127,7 @@ export default {
       ],
       weiboList: [
         {
-          content: '这是一条微博内容',
+          content: '真的不会写啊QUQ',
           images: ['http://h.hiphotos.baidu.com/image/pic/item/7c1ed21b0ef41bd5f2c2a9e953da81cb39db3d1d.jpg'],
           reposts: 10,
           comments: 20,
@@ -194,6 +212,19 @@ export default {
 
 .profile-info {
   margin-left: 20px;
+  align-items: center;
+  width: 728px;
+  display: flex;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.self-info{
+  margin-left: 20px;
+  align-items: center;
+  width: 600px;
+  margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 .weibo-list {

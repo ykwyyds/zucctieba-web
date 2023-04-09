@@ -31,9 +31,6 @@
             <el-form-item label="地区">
               <el-input v-model="form.location"></el-input>
             </el-form-item>
-            <el-form-item label="网站">
-              <el-input v-model="form.website"></el-input>
-            </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="submitForm">保存</el-button>
               <el-button @click="resetForm">重置</el-button>
@@ -58,7 +55,6 @@ export default {
         username: '',
         bio: '',
         location: '',
-        website: '',
         avatar: '',
       },
       imageUrl: '',
