@@ -3,8 +3,8 @@
     <!-- 用户资料 -->
     <el-card>
       <div slot="header" class="profile-info">
-        <el-avatar shape="square" :size="80" :src="userInfo.avatarUrl" />
-        <h2 style="margin-left: 10px;">{{ userInfo.nickname }}@{{ userInfo.username }}</h2>
+        <el-avatar shape="square" :size="80" :src="userInfo.avatar" />
+        <h2 style="margin-left: 10px;">{{ userInfo.name }}@{{ userInfo.username }}</h2>
         <el-button type="primary" :class="{subd}" round @click="sub">
           <i v-if="subd">已关注</i>
           <i v-else>关注</i>
@@ -16,7 +16,7 @@
             更多信息<i class="header-icon el-icon-info" />
           </template>
           <div class="self-info">
-            <p>性别：{{ userInfo.sex }}</p>
+            <p>性别：{{ userInfo.gender }}</p>
             <p>个性签名：{{ userInfo.bio }}</p>
             <p>IP所属地：{{ userInfo.location }}</p>
           </div>
@@ -27,8 +27,9 @@
       <el-col span="20">
         <!-- 帖子列表 -->
         <el-card class="self-list">
-          <div slot="header">
+          <div slot="header" class="Tietitle">
             <h3>帖子列表</h3>
+            <el-button type="danger" @click="dele">编辑帖子</el-button>
           </div>
           <div v-for="(weibo, index) in weiboList" :key="index">
             <div class="weibo-content">
@@ -51,7 +52,6 @@
                   </button>
                   <!--        评论、删除按钮         -->
                   <el-button @click="dialogFormVisible = true">评论</el-button>
-                  <el-button type="danger" @click="dele">删除</el-button>
                   <!--        评论按钮窗口         -->
                   <el-dialog title="发表评论" :visible.sync="dialogFormVisible">
                     <el-form ref="commentForm" :model="comment" label-width="80px">
@@ -88,8 +88,8 @@
             <h3>关注列表</h3>
           </div>
           <div v-for="(user, index) in followList" :key="index" class="guanzhu">
-            <el-avatar shape="square" :size="50" :src="user.avatarUrl" />
-            <span>{{ user.nickname }}</span>
+            <el-avatar shape="square" :size="50" :src="user.avatar" />
+            <span>{{ user.name }}@{{ user.username }}</span>
           </div>
         </el-card>
       </el-col>
@@ -114,10 +114,10 @@ export default {
       dialogFormVisible: false,
       newComment: '',
       userInfo: {
-        nickname: '张三',
+        name: '张三',
         username: 'Zhang',
-        avatarUrl: 'https://picsum.photos/60',
-        sex: '男',
+        avatar: 'https://picsum.photos/60',
+        gender: '男',
         bio: '一个热爱编程的程序员',
         location: '浙江'
       },
@@ -149,12 +149,14 @@ export default {
       ],
       followList: [
         {
-          nickname: '李四',
-          avatarUrl: 'https://picsum.photos/50'
+          name: '李四',
+          username: 'Li',
+          avatar: 'https://picsum.photos/50'
         },
         {
-          nickname: '王五',
-          avatarUrl: 'https://picsum.photos/40'
+          name: '王五',
+          username: 'Wang',
+          avatar: 'https://picsum.photos/40'
         }
       ]
     }
@@ -214,7 +216,7 @@ export default {
           message: '关注成功！'
         })
       } else {
-        this.$confirm('此操作将取消管制, 是否继续?', '提示', {
+        this.$confirm('此操作将取消关注, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -233,19 +235,19 @@ export default {
       }
     },
     dele() {
-      this.$confirm('此操作将删除该帖子, 是否继续?', '提示', {
+      this.$confirm('是否要去管理你的帖子?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         this.$message({
           type: 'success',
-          message: '删除成功!'
+          message: '已成功!'
         })
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: '已取消删除'
+          message: '已取消！'
         })
       })
     }
@@ -324,5 +326,10 @@ span.count {
 }
 .guanzhu{
   line-height: 65px;
+}
+.Tietitle{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 </style>

@@ -7,7 +7,7 @@
       <el-table-column prop="username" label="用户名"></el-table-column>
       <el-table-column prop="content" label="内容"></el-table-column>
       <el-table-column label="操作">
-        <template slot-scope="scope">
+        <template v-slot="scope">
           <el-button type="danger" size="mini" @click="deletePost(scope.$index)">
             删除
           </el-button>
