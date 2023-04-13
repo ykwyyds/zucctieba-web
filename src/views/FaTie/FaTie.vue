@@ -102,13 +102,13 @@ export default {
       radio: '1',
       options: [{
         value: '毕业季',
-        label: '毕业季'
+        label: '#毕业季'
       }, {
         value: '电子游戏',
-        label: '电子游戏'
+        label: '#电子游戏'
       }, {
-        value: '闲置出售',
-        label: '闲置出售'
+        value: '匿名天地',
+        label: '#匿名天地'
       }],
       value: [],
       tags: [

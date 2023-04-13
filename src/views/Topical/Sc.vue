@@ -1,7 +1,6 @@
 <template>
   <div class="post">
-    <h1>我的收藏</h1>
-    <el-divider></el-divider>
+    <h1 style="margin-left: 10px;">我的收藏</h1>
     <div class="post-header">
       <!--用户信息-->
       <div class="meme">
@@ -13,50 +12,64 @@
       </div>
     </div>
     <div class="post-content">
-      <!--信息本体-->
-      <p>{{ content }}</p>
-      <!--图片-->
-      <img v-if="image" class="post-image" v-bind:src="image" alt="Post Image" v-bind:style="{ width: '50px', height: '50px' }" />
-    </div>
-    <div class="post-footer">
-      <div class="likes">
-        <!--        生成点赞、收藏按钮        -->
-        <button @click="toggleLike" :class="{ liked: liked }">
-          <img src="@/assets/images/unlike.png" v-if="liked" />
-          <img src="@/assets/images/like.png" v-else />
-          <span class="count" v-if="dzcount">{{ dzcount }}</span>
-        </button>
-        <button @click="togglestar" :class="{ liked: stared }">
-          <i class="el-icon-star-on" v-if="stared" v-bind:style="{ width: '25px', height: '25px' }"></i>
-          <i class="el-icon-star-off" v-else v-bind:style="{ width: '25px', height: '25px' }"></i>
-          <span class="count" v-if="sccount">{{ sccount }}</span>
-        </button>
-        <el-button  @click="dialogFormVisible = true" >评论</el-button>
-        <!--        评论按钮         -->
-        <el-dialog title="发表评论" :visible.sync="dialogFormVisible">
-          <el-form ref="commentForm" :model="comment" label-width="80px">
-            <el-form-item label="Comment">
-              <el-input
-                type="textarea"
-                :rows="2"
-                placeholder="说点什么吧"
-                v-model="newComment">
-              </el-input>
-            </el-form-item>
-          </el-form>
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="submitComment">发 布</el-button>
+      <div v-for="(weibo, index) in weiboList" :key="index">
+        <div class="weibo-content">
+          <div v-if="weibo.images.length > 0" class="weibo-images">
+            <el-image v-for="(image, index) in weibo.images" :key="index" :src="image" />
           </div>
-        </el-dialog>
+          <p>{{ weibo.content }}</p>
+          <el-tag
+            :key="weibo.label"
+            type="">
+            {{ weibo.label }}
+          </el-tag>
+          <el-divider></el-divider>
+          <p style="text-align:right; color:grey;">发布时间：{{weibo.time}}</p>
+          <div class="weibo-footer">
+            <div class="likes">
+              <!--        生成点赞、收藏按钮        -->
+              <button :class="{ liked: liked }" @click="toggleLike">
+                <img v-if="liked" src="@/assets/images/unlike.png">
+                <img v-else src="@/assets/images/like.png">
+                <span v-if="dzcount" class="count">{{ dzcount }}</span>
+              </button>
+              <button :class="{ liked: stared }" @click="togglestar">
+                <i v-if="stared" class="el-icon-star-on" :style="{ width: '25px', height: '25px' }" />
+                <i v-else class="el-icon-star-off" :style="{ width: '25px', height: '25px' }" />
+                <span v-if="sccount" class="count">{{ sccount }}</span>
+              </button>
+              <!--        评论按钮         -->
+              <el-button @click="dialogFormVisible = true">评论</el-button>
+              <!--        评论按钮窗口         -->
+              <el-dialog title="发表评论" :visible.sync="dialogFormVisible">
+                <el-form ref="commentForm" :model="comment" label-width="80px">
+                  <el-form-item label="Comment">
+                    <el-input
+                      v-model="newComment"
+                      type="textarea"
+                      :rows="2"
+                      placeholder="说点什么吧"
+                    />
+                  </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                  <el-button @click="dialogFormVisible = false">取 消</el-button>
+                  <el-button type="primary" @click="submitComment">发 布</el-button>
+                </div>
+              </el-dialog>
+            </div>
+            <div class="comments">
+              <!-- 评论列表 -->
+              <div class="comment-list">
+                <CommentItem v-for="comment in comments" :key="comment.id" :comment="comment" />
+              </div>
+            </div>
+          </div>
+          <el-divider></el-divider>
+        </div>
       </div>
     </div>
-    <div class="comments">
-      <!-- 评论列表 -->
-      <div class="comment-list">
-        <CommentItem v-for="comment in comments" :key="comment.id" :comment="comment" />
-      </div>
-    </div>
+  </div>
   </div>
 </template>
 
@@ -64,7 +77,7 @@
 import CommentItem from './CommentItem.vue'
 
 export default {
-  name: 'Sc',
+  name: 'TieBa',
   props: {},
   components: { CommentItem },
   data() {
@@ -74,8 +87,6 @@ export default {
         name: 'Yumou',
         username: 'litterfish'
       },
-      content: 'xxxxxxxxxxxxx',
-      image: 'http://h.hiphotos.baidu.com/image/pic/item/7c1ed21b0ef41bd5f2c2a9e953da81cb39db3d1d.jpg',
       likes: '1',
       liked: false, // 初始状态为未点赞
       stared: false, //初始状态未收藏
@@ -88,13 +99,19 @@ export default {
           author: '张三',
           content: '小姐姐太美了！',
           timestamp: '2023/04/01 12:34:56'
-        },
+        }
+      ],
+      weiboList: [
         {
-          id: 2,
-          author: '李四',
-          content: '对啊对啊!',
-          timestamp: '2023/04/01 12:50:56'
-        },
+          id: 1,
+          content: '真的不会写啊QUQ',
+          images: ['http://h.hiphotos.baidu.com/image/pic/item/7c1ed21b0ef41bd5f2c2a9e953da81cb39db3d1d.jpg'],
+          time: '2023/04/01 12:34:00',
+          reposts: 10,
+          comments: 20,
+          likes: 30,
+          label: '[#学习]'
+        }
       ],
       newComment: ''
     }
