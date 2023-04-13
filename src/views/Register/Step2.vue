@@ -1,4 +1,7 @@
 <template>
+  <div>
+  <h1 style="margin-left: 10px;">我问你答</h1>
+  <el-divider></el-divider>
   <el-card class="question-card">
     <div slot="header" class="question-header">{{ questionNumber }}. {{ currentQuestion.question }}</div>
     <el-radio-group v-model="selectedAnswer" class="options">
@@ -6,11 +9,12 @@
     </el-radio-group>
     <el-button v-if="showNextButton" type="primary" class="next-button" @click="nextQuestion">下一题</el-button>
   </el-card>
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'YuTest',
+  name: 'Step2',
   data() {
     return {
       allQuestions: [
@@ -58,6 +62,7 @@ export default {
     nextQuestion() {
       if (this.selectedAnswer === this.currentQuestion.answer) {
         if (this.currentQuestionIndex === this.questions.length - 1) {
+          this.$router.push('/register/Step3');
           alert('你已完成所有题目！');
         } else {
           this.currentQuestionIndex++;
@@ -65,7 +70,7 @@ export default {
           this.showNextButton = false;
         }
       } else {
-        this.$router.push('/homepage/index');
+        this.$router.push('/register/Step1');
         alert('选择错误，请重新做题！');
       }
     },

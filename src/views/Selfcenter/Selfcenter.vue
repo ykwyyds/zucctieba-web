@@ -9,6 +9,13 @@
           <i v-if="subd">已关注</i>
           <i v-else>关注</i>
         </el-button>
+        <el-tag
+          v-for="item in items"
+          :key="item.label"
+          :type="item.type"
+          effect="dark">
+          {{ item.label }}
+        </el-tag>
       </div>
       <el-collapse accordion>
         <el-collapse-item>
@@ -33,10 +40,17 @@
           </div>
           <div v-for="(weibo, index) in weiboList" :key="index">
             <div class="weibo-content">
-              <p>{{ weibo.content }}</p>
               <div v-if="weibo.images.length > 0" class="weibo-images">
                 <el-image v-for="(image, index) in weibo.images" :key="index" :src="image" />
               </div>
+              <p>{{ weibo.content }}</p>
+              <el-tag
+                :key="weibo.label"
+                type="">
+                {{ weibo.label }}
+              </el-tag>
+              <el-divider></el-divider>
+              <p style="text-align:right; color:grey;">发布时间：{{weibo.time}}</p>
               <div class="weibo-footer">
                 <div class="likes">
                   <!--        生成点赞、收藏按钮        -->
@@ -50,7 +64,7 @@
                     <i v-else class="el-icon-star-off" :style="{ width: '25px', height: '25px' }" />
                     <span v-if="sccount" class="count">{{ sccount }}</span>
                   </button>
-                  <!--        评论、删除按钮         -->
+                  <!--        评论按钮         -->
                   <el-button @click="dialogFormVisible = true">评论</el-button>
                   <!--        评论按钮窗口         -->
                   <el-dialog title="发表评论" :visible.sync="dialogFormVisible">
@@ -77,6 +91,7 @@
                   </div>
                 </div>
               </div>
+              <el-divider></el-divider>
             </div>
           </div>
         </el-card>
@@ -90,6 +105,12 @@
           <div v-for="(user, index) in followList" :key="index" class="guanzhu">
             <el-avatar shape="square" :size="50" :src="user.avatar" />
             <span>{{ user.name }}@{{ user.username }}</span>
+            <el-tag
+              :key="user.label"
+              type="success"
+              effect="dark">
+              {{ user.label }}
+            </el-tag>
           </div>
         </el-card>
       </el-col>
@@ -134,30 +155,39 @@ export default {
           id: 1,
           content: '真的不会写啊QUQ',
           images: ['http://h.hiphotos.baidu.com/image/pic/item/7c1ed21b0ef41bd5f2c2a9e953da81cb39db3d1d.jpg'],
+          time: '2023/04/01 12:34:00',
           reposts: 10,
           comments: 20,
-          likes: 30
+          likes: 30,
+          label: '[#毕业季]'
         },
         {
           id: 2,
           content: '我也不会啊',
           images: [],
+          time: '2023/04/02 12:34:00',
           reposts: 10,
           comments: 20,
-          likes: 50
+          likes: 50,
+          label: '[#学习]'
         }
       ],
       followList: [
         {
           name: '李四',
           username: 'Li',
-          avatar: 'https://picsum.photos/50'
+          avatar: 'https://picsum.photos/50',
+          label: '摸鱼中'
         },
         {
           name: '王五',
           username: 'Wang',
-          avatar: 'https://picsum.photos/40'
+          avatar: 'https://picsum.photos/40',
+          label: '正在上课：微积分（甲）'
         }
+      ],
+      items: [
+        { type: 'success', label: '正在上课：创新创业' }
       ]
     }
   },
@@ -243,7 +273,9 @@ export default {
         this.$message({
           type: 'success',
           message: '已成功!'
-        })
+        },
+        this.$router.push('/guanli/tieguan')
+        )
       }).catch(() => {
         this.$message({
           type: 'info',
