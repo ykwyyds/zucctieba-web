@@ -1,6 +1,7 @@
 <template>
   <div class="comment-item">
     <div class="comment-header">
+      <el-avatar shape="square" :size="30" :src="comment.avatar" />
       <span class="comment-author">{{ comment.author }}</span>
       <span class="comment-timestamp">{{ comment.timestamp }}</span>
     </div>

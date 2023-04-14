@@ -23,64 +23,71 @@
         <p class="username">@{{ userInfo.username }}</p>
       </div>
     </div>
-    <div class="post-content">
-      <div v-for="(weibo, index) in weiboList" :key="index">
-        <div class="weibo-content">
-          <div v-if="weibo.images.length > 0" class="weibo-images">
-            <el-image v-for="(image, index) in weibo.images" :key="index" :src="image" />
-          </div>
-          <p>{{ weibo.content }}</p>
-          <el-tag
-            :key="weibo.label"
-            type="">
-            {{ weibo.label }}
-          </el-tag>
-          <el-divider></el-divider>
-          <p style="text-align:right; color:grey;">发布时间：{{weibo.time}}</p>
-          <div class="weibo-footer">
-            <div class="likes">
-              <!--        生成点赞、收藏按钮        -->
-              <button :class="{ liked: liked }" @click="toggleLike">
-                <img v-if="liked" src="@/assets/images/unlike.png">
-                <img v-else src="@/assets/images/like.png">
-                <span v-if="dzcount" class="count">{{ dzcount }}</span>
-              </button>
-              <button :class="{ liked: stared }" @click="togglestar">
-                <i v-if="stared" class="el-icon-star-on" :style="{ width: '25px', height: '25px' }" />
-                <i v-else class="el-icon-star-off" :style="{ width: '25px', height: '25px' }" />
-                <span v-if="sccount" class="count">{{ sccount }}</span>
-              </button>
-              <!--        评论按钮         -->
-              <el-button @click="dialogFormVisible = true">评论</el-button>
-              <!--        评论按钮窗口         -->
-              <el-dialog title="发表评论" :visible.sync="dialogFormVisible">
-                <el-form ref="commentForm" :model="comment" label-width="80px">
-                  <el-form-item label="Comment">
-                    <el-input
-                      v-model="newComment"
-                      type="textarea"
-                      :rows="2"
-                      placeholder="说点什么吧"
-                    />
-                  </el-form-item>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                  <el-button @click="dialogFormVisible = false">取 消</el-button>
-                  <el-button type="primary" @click="submitComment">发 布</el-button>
-                </div>
-              </el-dialog>
+      <div class="post-content">
+        <div v-for="(weibo, index) in weiboList" :key="index">
+          <div class="weibo-content">
+            <div v-if="weibo.images.length > 0" class="weibo-images">
+              <el-image v-for="(image, index) in weibo.images" :key="index" :src="image" />
             </div>
-            <div class="comments">
-              <!-- 评论列表 -->
-              <div class="comment-list">
-                <CommentItem v-for="comment in comments" :key="comment.id" :comment="comment" />
+            <p>{{ weibo.content }}</p>
+            <el-tag
+              :key="weibo.label"
+              type="">
+              {{ weibo.label }}
+            </el-tag>
+            <el-divider></el-divider>
+            <p style="text-align:right; color:grey;">发布时间：{{weibo.time}}</p>
+            <div class="weibo-footer">
+              <div class="likes">
+                <!--        生成点赞、收藏按钮        -->
+                <button :class="{ liked: liked }" @click="toggleLike">
+                  <img v-if="liked" src="@/assets/images/unlike.png">
+                  <img v-else src="@/assets/images/like.png">
+                  <span v-if="dzcount" class="count">{{ dzcount }}</span>
+                </button>
+                <button :class="{ liked: stared }" @click="togglestar">
+                  <i v-if="stared" class="el-icon-star-on" :style="{ width: '25px', height: '25px' }" />
+                  <i v-else class="el-icon-star-off" :style="{ width: '25px', height: '25px' }" />
+                  <span v-if="sccount" class="count">{{ sccount }}</span>
+                </button>
+                <!--        评论按钮         -->
+                <el-badge :value="1" class="item">
+                  <el-button @click="showComments = !showComments">
+                    {{ showComments ? '收起评论' : '评论区' }}
+                  </el-button>
+                </el-badge>
+                <el-button @click="dialogFormVisible = true">评论</el-button>
+                <!--        评论按钮窗口         -->
+                <el-dialog title="发表评论" :visible.sync="dialogFormVisible">
+                  <el-form ref="commentForm" :model="comment" label-width="80px">
+                    <el-form-item label="Comment">
+                      <el-input
+                        v-model="newComment"
+                        type="textarea"
+                        :rows="2"
+                        placeholder="说点什么吧"
+                      />
+                    </el-form-item>
+                  </el-form>
+                  <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogFormVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="submitComment">发 布</el-button>
+                  </div>
+                </el-dialog>
+              </div>
+              <div class="comments">
+                <!-- 评论列表 -->
+                <transition name="el-collapse">
+                  <div class="comment-list" v-show="showComments">
+                    <CommentItem v-for="comment in comments" :key="comment.id" :comment="comment" />
+                  </div>
+                </transition>
               </div>
             </div>
+            <el-divider></el-divider>
           </div>
-          <el-divider></el-divider>
         </div>
       </div>
-    </div>
     </el-card>
   </div>
 </template>
@@ -108,9 +115,11 @@ export default {
       dzcount: 50, // 点赞计数器
       sccount: 20, // 收藏计数器
       dialogFormVisible: false,
+      showComments: false,
       comments: [
         {
           id: 1,
+          avatar: 'https://picsum.photos/30',
           author: '张三',
           content: '小姐姐太美了！',
           timestamp: '2023/04/01 12:34:56'

@@ -51,6 +51,11 @@
                   <span v-if="sccount" class="count">{{ sccount }}</span>
                 </button>
                 <!--        评论按钮         -->
+                <el-badge :value="1" class="item">
+                  <el-button @click="showComments = !showComments">
+                    {{ showComments ? '收起评论' : '评论区' }}
+                  </el-button>
+                </el-badge>
                 <el-button @click="dialogFormVisible = true">评论</el-button>
                 <!--        评论按钮窗口         -->
                 <el-dialog title="发表评论" :visible.sync="dialogFormVisible">
@@ -72,9 +77,11 @@
               </div>
               <div class="comments">
                 <!-- 评论列表 -->
-                <div class="comment-list">
-                  <CommentItem v-for="comment in comments" :key="comment.id" :comment="comment" />
-                </div>
+                <transition name="el-collapse">
+                  <div class="comment-list" v-show="showComments">
+                    <CommentItem v-for="comment in comments" :key="comment.id" :comment="comment" />
+                  </div>
+                </transition>
               </div>
             </div>
             <el-divider></el-divider>
@@ -108,9 +115,11 @@ export default {
       dzcount: 50, // 点赞计数器
       sccount: 20, // 收藏计数器
       dialogFormVisible: false,
+      showComments: false,
       comments: [
         {
           id: 1,
+          avatar: 'https://picsum.photos/30',
           author: '张三',
           content: '小姐姐太美了！',
           timestamp: '2023/04/01 12:34:56'
